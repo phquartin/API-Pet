@@ -2,8 +2,8 @@ package dev.phquartin.pets.service;
 
 import dev.phquartin.pets.controller.request.AddressRequest;
 import dev.phquartin.pets.controller.request.PetRequest;
-import dev.phquartin.pets.controller.response.AddressResponse;
 import dev.phquartin.pets.controller.response.PetResponse;
+import dev.phquartin.pets.exception.NoDataFoundException;
 import dev.phquartin.pets.mapper.PetMapper;
 import dev.phquartin.pets.model.pet.Pet;
 import dev.phquartin.pets.model.pet.PetGender;
@@ -54,10 +54,11 @@ public class PetService {
         return pets.stream().map(petMapper::toResponsePet).toList();
     }
     public PetResponse getPetById(Long id){
-        Pet pet = petRepository.findById(id).orElseThrow();
+        Pet pet = petRepository.findById(id).orElseThrow(() -> new NoDataFoundException("Pet with id " + id + " does not exist"));
         return petMapper.toResponsePet(pet);
     }
     public void deletePetById(Long id){
+        petRepository.findById(id).orElseThrow(() -> new NoDataFoundException("Pet with id " + id + " does not exist"));
         petRepository.deleteById(id);
     }
 
