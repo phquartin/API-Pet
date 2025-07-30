@@ -6,10 +6,9 @@ import dev.phquartin.pets.service.PetService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pet")
@@ -26,6 +25,19 @@ public class PetController {
         PetResponse petResponse = service.create(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(petResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PetResponse>> list(){
+        return ResponseEntity.ok(service.getAllPets());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<PetResponse> getPetById(@PathVariable Long id){
+        return ResponseEntity.ok(service.getPetById(id));
+    }
+    @DeleteMapping("/{id}")
+    public void deletePetById(@PathVariable Long id){
+        service.deletePetById(id);
     }
 
 }

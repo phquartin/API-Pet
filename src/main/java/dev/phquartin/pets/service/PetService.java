@@ -14,6 +14,8 @@ import dev.phquartin.pets.repository.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PetService {
@@ -43,21 +45,20 @@ public class PetService {
 
         Pet saved = petRepository.save(entityPet);
 
-        AddressResponse responseAddress = petMapper.toResponseAddress(saved.getAddress());
-        PetResponse responsePet = PetResponse.builder()
-                .id(saved.getId())
-                .firstname(saved.getFirstname())
-                .lastname(saved.getLastname())
-                .type(saved.getType().toString())
-                .gender(saved.getGender().toString())
-                .age(saved.getAge())
-                .weight(saved.getWeight())
-                .breed(saved.getBreed())
-                .address(responseAddress)
-                .build();
+        return petMapper.toResponsePet(saved);
 
-        return responsePet;
+    }
 
+    public List<PetResponse> getAllPets(){
+        List<Pet> pets = petRepository.findAll();
+        return pets.stream().map(petMapper::toResponsePet).toList();
+    }
+    public PetResponse getPetById(Long id){
+        Pet pet = petRepository.findById(id).orElseThrow();
+        return petMapper.toResponsePet(pet);
+    }
+    public void deletePetById(Long id){
+        petRepository.deleteById(id);
     }
 
 }
