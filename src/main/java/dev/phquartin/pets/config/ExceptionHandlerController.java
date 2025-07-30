@@ -48,6 +48,17 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .status(400)
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(formatter))
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     /**
      * Manipulador para exceções de validação (@Valid).
      * Retorna um corpo de resposta com os erros específicos de cada campo.
