@@ -1,8 +1,8 @@
 package dev.phquartin.pets.model.pet;
 
 public enum PetType {
-    CACHORRO("Dog"),
-    GATO("Cat");
+    DOG("Dog"),
+    CAT("Cat");
 
     private final String name;
     PetType(String name) {
